@@ -209,9 +209,9 @@ declare namespace IPFS {
     }
 
     export interface ObjectAPI {
-        new(template: 'unixfs-dir', callback: Callback<DAGNode>): void;
-        new(callback: Callback<DAGNode>): void;
-        new(): Promise<DAGNode>;
+        "new"(template: 'unixfs-dir', callback: Callback<DAGNode>): void;
+        "new"(callback: Callback<DAGNode>): void;
+        "new"(): Promise<DAGNode>;
 
         put(obj: Obj, options: PutObjectOptions, callback: Callback<any>): void;
         put(obj: Obj, callback: Callback<any>): void;
