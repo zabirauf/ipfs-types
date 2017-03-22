@@ -1,0 +1,26 @@
+{
+    "name": "ipfs",
+    "libraryName": "IPFS",
+    "data": {
+        "contributors": [
+            {
+                "name": "Zohaib Rauf",
+                "url": "http://zohaib.me"
+            }
+        ],
+        "dependencies": {},
+        "typeScriptVersion": "2.1",
+        "libraryName": "IPFS",
+        "typingsPackageName": "ipfs",
+        "globals": [
+            "ipfs"
+        ],
+        "declaredModules": [
+            "ipfs/."
+        ],
+        "files": [
+            "index.d.ts"
+        ],
+        "hasPackageJson": false
+    }
+}

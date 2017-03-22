@@ -1,0 +1,10 @@
+{
+  "name": "@types/ipfs",
+  "version": "0.23.0",
+  "description": "The type definition for IPFS package",
+  "types": "index.d.ts",
+  "keywords": ["ipfs", "types"],
+  "author": "Zohaib Rauf",
+  "license": "MIT",
+  "dependencies": {}
+}
