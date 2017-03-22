@@ -24,15 +24,15 @@ declare class IPFS {
     id(callback: (error: Error, version: IPFS.Id) => void): void ;
     id(): Promise<IPFS.Id>; 
 
-    repo: IPFS.Repo;
+    repo: IPFS.RepoAPI;
     bootstrap: any;
     config: any;
     block: any;
-    object: any;
+    object: IPFS.ObjectAPI;
     dag: any;
     libp2p: any;
-    swarm: any;
-    files: IPFS.Files;
+    swarm: IPFS.SwarmAPI;
+    files: IPFS.FilesAPI;
     bitswap: any;
 
     ping(callback: (error: Error) => void): void;
@@ -44,6 +44,8 @@ declare class IPFS {
 }
 
 declare namespace IPFS {
+    type Callback<T> = (error: Error, result?: T) => void;
+
     export interface Options {
         init?: boolean;
         start?: boolean;
@@ -58,7 +60,10 @@ declare namespace IPFS {
         log?: Function;
     }
 
-    export type Multiaddr = any | string;
+    export interface Multiaddr {
+        buffer: Uint8Array;
+    }
+
     export type Multihash = any | string;
     export type CID = any;
 
@@ -85,11 +90,11 @@ declare namespace IPFS {
         protocolVersion: string;
     }
 
-    export interface Repo {
-        init(bits: number, empty: boolean, callback: (error: Error, result?: any) => void): void;
+    export interface RepoAPI {
+        init(bits: number, empty: boolean, callback: Callback<any>): void;
 
-        version(options: any, callback: (error: Error, result?: any) => void): void;
-        version(callback: (error: Error, result?: any) => void): void;
+        version(options: any, callback: Callback<any>): void;
+        version(callback: Callback<any>): void;
 
         gc(): void;
         path(): string;
@@ -105,23 +110,130 @@ declare namespace IPFS {
     }
 
 
-    export interface Files {
-        createAddStream(options: any, callback: (error: Error, stream?: any) => void): void;
-        createAddStream(callback: (error: Error, stream?: any) => void): void;
+    export interface FilesAPI {
+        createAddStream(options: any, callback: Callback<any>): void;
+        createAddStream(callback: Callback<any>): void;
 
         createPullStream(options: any): any;
 
-        add(data: FileContent, options: any, callback: (error: Error, result?: IPFSFile) => void): void;
-        add(data: FileContent, callback: (error: Error, result?: IPFSFile) => void): void;
+        add(data: FileContent, options: any, callback: Callback<IPFSFile>): void;
+        add(data: FileContent, callback: Callback<IPFSFile>): void;
         add(data: FileContent): Promise<IPFSFile>;
 
-        cat(hash: Multihash, callback: (error: Error, content?: FileContent) => void): void;
+        cat(hash: Multihash, callback: Callback<FileContent>): void;
         cat(hash: Multihash): Promise<FileContent>;
 
-        get(hash: Multihash, callback: (error: Error, file?: File) => void): void;
-        get(hash: Multihash): Promise<File>;
+        get(hash: Multihash, callback: Callback<IPFSFile>): void;
+        get(hash: Multihash): Promise<IPFSFile>;
 
-        getPull(hash: Multihash, callback: (error: Error, result?: any) => void): void;
+        getPull(hash: Multihash, callback: Callback<any>): void;
+    }
+
+    export interface PeersOptions {
+        v?: boolean;
+        verbose?: boolean;
+    }
+
+    export type PeerId = any;
+
+    export interface PeerInfo {
+        id: PeerId;
+        multiaddr: Multiaddr;
+        multiaddrs: Multiaddr[];
+        distinctMultiaddr(): Multiaddr[];
+    }
+
+    export interface Peer {
+        addr: Multiaddr;
+        peer: PeerInfo;
+    }
+
+    export interface SwarmAPI {
+        peers(options: PeersOptions, callback: Callback<Peer[]>): void;
+        peers(callback: Callback<Peer[]>): void;
+        peers(): Promise<Peer[]>;
+
+        addrs(callback: Callback<PeerInfo[]>) : void;
+        addrs(): Promise<PeerInfo[]>;
+
+        localAddrs(callback: Callback<Multiaddr[]>): void;
+        localAddrs(): Promise<Multiaddr[]>;
+
+        connect(maddr: Multiaddr | string, callback: Callback<any>): void;
+        connect(maddr: Multiaddr | string): Promise<any>;
+
+        disconnect(maddr: Multiaddr | string, callback: Callback<any>): void;
+        disconnect(maddr: Multiaddr | string): Promise<any>;
+
+        filters(callback: Callback<void>): never;
+    }
+
+    export type DAGNode = any;
+    export type DAGLink = any;
+    export type DAGLinkRef = DAGLink | any;
+    export type Obj = BufferSource | Object;
+
+    export interface ObjectStat {
+        Hash: Multihash;
+        NumLinks: number;
+        BlockSize: number;
+        LinksSize: number;
+        DataSize: number;
+        CumulativeSize: number;
+    }
+
+    export interface PutObjectOptions {
+        enc?: any;
+    }
+
+    export interface GetObjectOptions {
+        enc?: any;
+    }
+
+    export interface ObjectPatchAPI {
+        addLink(multihash: Multihash, link: DAGLink, options: GetObjectOptions, callback: Callback<any>): void;
+        addLink(multihash: Multihash, link: DAGLink, callback: Callback<any>): void;
+        addLink(multihash: Multihash, link: DAGLink): Promise<any>;
+
+        rmLink(multihash: Multihash, linkRef: DAGLinkRef, options: GetObjectOptions, callback: Callback<any>): void;
+        rmLink(multihash: Multihash, linkRef: DAGLinkRef, callback: Callback<any>): void;
+        rmLink(multihash: Multihash, linkRef: DAGLinkRef): Promise<any>;
+
+        appendData(multihash: Multihash, data: any, options: GetObjectOptions, callback: Callback<any>): void;
+        appendData(multihash: Multihash, data: any, callback: Callback<any>): void;
+        appendData(multihash: Multihash, data: any): Promise<any>;
+
+        setData(multihash: Multihash, data: any, options: GetObjectOptions, callback: Callback<any>): void;
+        setData(multihash: Multihash, data: any, callback: Callback<any>): void;
+        setData(multihash: Multihash, data: any): Promise<any>;
+    }
+
+    export interface ObjectAPI {
+        new(template: 'unixfs-dir', callback: Callback<DAGNode>): void;
+        new(callback: Callback<DAGNode>): void;
+        new(): Promise<DAGNode>;
+
+        put(obj: Obj, options: PutObjectOptions, callback: Callback<any>): void;
+        put(obj: Obj, callback: Callback<any>): void;
+        put(obj: Obj): Promise<any>;
+
+        get(multihash: Multihash, options: GetObjectOptions, callback: Callback<any>): void;
+        get(multihash: Multihash, callback: Callback<any>): void;
+        get(multihash: Multihash): Promise<any>;
+
+        data(multihash: Multihash, options: GetObjectOptions, callback: Callback<any>): void;
+        data(multihash: Multihash, callback: Callback<any>): void;
+        data(multihash: Multihash): Promise<any>;
+
+        links(multihash: Multihash, options: GetObjectOptions, callback: Callback<DAGLink[]>): void;
+        links(multihash: Multihash, callback: Callback<DAGLink[]>): void;
+        links(multihash: Multihash): Promise<DAGLink[]>;
+
+        stat(multihash: Multihash, options: GetObjectOptions, callback: Callback<ObjectStat>): void;
+        stat(multihash: Multihash, callback: Callback<ObjectStat>): void;
+        stat(multihash: Multihash): Promise<ObjectStat>;
+
+        patch: ObjectPatchAPI;
     }
 
     export function createNode(options: Options): IPFS;
