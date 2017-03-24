@@ -3,24 +3,28 @@ export as namespace ipfs;
 
 export = IPFS;
 
+type Callback<T> = (error: Error, result?: T) => void;
+
 declare class IPFS {
     constructor(options: IPFS.Options);
 
     types: IPFS.Types;
 
-    init(options: IPFS.InitOptions, callback: (error: Error, success?: boolean) => void): void;
-    init(callback: (error: Error, success?: boolean) => void): void;
+    init(options: IPFS.InitOptions, callback: Callback<boolean>): void;
+    init(callback: Callback<boolean>): void;
 
-    preStart(callback: (error: Error, result?: any) => void): void;
-    start(callback?: (error: Error, result?: any) => void): void;
+    preStart(callback: Callback<any>): void;
+    start(callback?: Callback<any>): void;
     stop(callback?: (error?: Error) => void): void;
     isOnline(): boolean;
 
     version(options: any, callback: (error: Error, version: IPFS.Version) => void): void ;
+    version(options: any): Promise<IPFS.Version>;
     version(callback: (error: Error, version: IPFS.Version) => void): void ;
     version(): Promise<IPFS.Version>; 
 
     id(options: any, callback: (error: Error, version: IPFS.Id) => void): void ;
+    id(options: any): Promise<IPFS.Id>;
     id(callback: (error: Error, version: IPFS.Id) => void): void ;
     id(): Promise<IPFS.Id>; 
 
@@ -29,7 +33,7 @@ declare class IPFS {
     config: any;
     block: any;
     object: IPFS.ObjectAPI;
-    dag: any;
+    dag: IPFS.DagAPI;
     libp2p: any;
     swarm: IPFS.SwarmAPI;
     files: IPFS.FilesAPI;
@@ -44,7 +48,6 @@ declare class IPFS {
 }
 
 declare namespace IPFS {
-    type Callback<T> = (error: Error, result?: T) => void;
 
     export interface Options {
         init?: boolean;
@@ -109,7 +112,6 @@ declare namespace IPFS {
         content?: FileContent;
     }
 
-
     export interface FilesAPI {
         createAddStream(options: any, callback: Callback<any>): void;
         createAddStream(callback: Callback<any>): void;
@@ -117,6 +119,7 @@ declare namespace IPFS {
         createPullStream(options: any): any;
 
         add(data: FileContent, options: any, callback: Callback<IPFSFile>): void;
+        add(data: FileContent, options: any): Promise<IPFSFile>;
         add(data: FileContent, callback: Callback<IPFSFile>): void;
         add(data: FileContent): Promise<IPFSFile>;
 
@@ -150,6 +153,7 @@ declare namespace IPFS {
 
     export interface SwarmAPI {
         peers(options: PeersOptions, callback: Callback<Peer[]>): void;
+        peers(options: PeersOptions): Promise<Peer[]>;
         peers(callback: Callback<Peer[]>): void;
         peers(): Promise<Peer[]>;
 
@@ -192,18 +196,22 @@ declare namespace IPFS {
 
     export interface ObjectPatchAPI {
         addLink(multihash: Multihash, link: DAGLink, options: GetObjectOptions, callback: Callback<any>): void;
+        addLink(multihash: Multihash, link: DAGLink, options: GetObjectOptions): Promise<any>;
         addLink(multihash: Multihash, link: DAGLink, callback: Callback<any>): void;
         addLink(multihash: Multihash, link: DAGLink): Promise<any>;
 
         rmLink(multihash: Multihash, linkRef: DAGLinkRef, options: GetObjectOptions, callback: Callback<any>): void;
+        rmLink(multihash: Multihash, linkRef: DAGLinkRef, options: GetObjectOptions): Promise<any>;
         rmLink(multihash: Multihash, linkRef: DAGLinkRef, callback: Callback<any>): void;
         rmLink(multihash: Multihash, linkRef: DAGLinkRef): Promise<any>;
 
         appendData(multihash: Multihash, data: any, options: GetObjectOptions, callback: Callback<any>): void;
+        appendData(multihash: Multihash, data: any, options: GetObjectOptions): Promise<any>;
         appendData(multihash: Multihash, data: any, callback: Callback<any>): void;
         appendData(multihash: Multihash, data: any): Promise<any>;
 
         setData(multihash: Multihash, data: any, options: GetObjectOptions, callback: Callback<any>): void;
+        setData(multihash: Multihash, data: any, options: GetObjectOptions): Promise<any>;
         setData(multihash: Multihash, data: any, callback: Callback<any>): void;
         setData(multihash: Multihash, data: any): Promise<any>;
     }
@@ -214,26 +222,52 @@ declare namespace IPFS {
         "new"(): Promise<DAGNode>;
 
         put(obj: Obj, options: PutObjectOptions, callback: Callback<any>): void;
+        put(obj: Obj, options: PutObjectOptions): Promise<any>;
         put(obj: Obj, callback: Callback<any>): void;
         put(obj: Obj): Promise<any>;
 
         get(multihash: Multihash, options: GetObjectOptions, callback: Callback<any>): void;
+        get(multihash: Multihash, options: GetObjectOptions): Promise<any>;
         get(multihash: Multihash, callback: Callback<any>): void;
         get(multihash: Multihash): Promise<any>;
 
         data(multihash: Multihash, options: GetObjectOptions, callback: Callback<any>): void;
+        data(multihash: Multihash, options: GetObjectOptions): Promise<any>;
         data(multihash: Multihash, callback: Callback<any>): void;
         data(multihash: Multihash): Promise<any>;
 
         links(multihash: Multihash, options: GetObjectOptions, callback: Callback<DAGLink[]>): void;
+        links(multihash: Multihash, options: GetObjectOptions): Promise<DAGLink[]>;
         links(multihash: Multihash, callback: Callback<DAGLink[]>): void;
         links(multihash: Multihash): Promise<DAGLink[]>;
 
         stat(multihash: Multihash, options: GetObjectOptions, callback: Callback<ObjectStat>): void;
+        stat(multihash: Multihash, options: GetObjectOptions): Promise<ObjectStat>;
         stat(multihash: Multihash, callback: Callback<ObjectStat>): void;
         stat(multihash: Multihash): Promise<ObjectStat>;
 
         patch: ObjectPatchAPI;
+    }
+
+    export interface DagAPI {
+        put(dagNode: any, options: any, callback: Callback<any>): void;
+        put(dagNode: any, options: any): Promise<any>;
+
+        get(cid: string | CID, path: string, options: any, callback: Callback<any>): void;
+        get(cid: string | CID, path: string, options: any): Promise<any>;
+        get(cid: string | CID, path: string, callback: Callback<any>): void;
+        get(cid: string | CID, path: string): Promise<any>;
+        get(cid: string | CID, callback: Callback<any>): void;
+        get(cid: string | CID): Promise<any>;
+
+        tree(cid: string | CID, path: string, options: any, callback: Callback<any>): void;
+        tree(cid: string | CID, path: string, options: any): Promise<any>;
+        tree(cid: string | CID, path: string, callback: Callback<any>): void;
+        tree(cid: string | CID, path: string): Promise<any>;
+        tree(cid: string | CID, options: any, callback: Callback<any>): void;
+        tree(cid: string | CID, options: any): Promise<any>;
+        tree(cid: string | CID, callback: Callback<any>): void;
+        tree(cid: string | CID): Promise<any>;
     }
 
     export function createNode(options: Options): IPFS;

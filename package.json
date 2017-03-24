@@ -1,6 +1,6 @@
 {
   "name": "@types/ipfs",
-  "version": "0.23.02",
+  "version": "0.23.03",
   "description": "The type definition for IPFS package",
   "types": "index.d.ts",
   "keywords": ["ipfs", "types"],
