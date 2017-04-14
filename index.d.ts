@@ -118,10 +118,10 @@ declare namespace IPFS {
 
         createPullStream(options: any): any;
 
-        add(data: FileContent, options: any, callback: Callback<IPFSFile>): void;
-        add(data: FileContent, options: any): Promise<IPFSFile>;
-        add(data: FileContent, callback: Callback<IPFSFile>): void;
-        add(data: FileContent): Promise<IPFSFile>;
+        add(data: FileContent, options: any, callback: Callback<IPFSFile[]>): void;
+        add(data: FileContent, options: any): Promise<IPFSFile[]>;
+        add(data: FileContent, callback: Callback<IPFSFile[]>): void;
+        add(data: FileContent): Promise<IPFSFile[]>;
 
         cat(hash: Multihash, callback: Callback<FileContent>): void;
         cat(hash: Multihash): Promise<FileContent>;
