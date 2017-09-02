@@ -44,8 +44,8 @@ declare class IPFS {
 
     pubsub: any; 
 
-    on(event: string, callback: () => void): void;
-    once(event: string, callback: () => void): void;
+    on(event: string, callback: () => void): IPFS;
+    once(event: string, callback: () => void): IFPS;
 }
 
 declare namespace IPFS {
