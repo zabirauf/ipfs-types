@@ -1,6 +1,6 @@
 {
   "name": "typestub-ipfs",
-  "version": "0.23.04",
+  "version": "0.23.4",
   "description": "The type definition for IPFS package",
   "types": "index.d.ts",
   "keywords": [
