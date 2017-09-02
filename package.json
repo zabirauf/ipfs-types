@@ -3,8 +3,13 @@
   "version": "0.23.04",
   "description": "The type definition for IPFS package",
   "types": "index.d.ts",
-  "keywords": ["ipfs", "types"],
+  "keywords": [
+    "ipfs",
+    "types",
+    "typestub"
+  ],
   "author": "Zohaib Rauf",
+  "maintainer": "Beeno Tung",
   "license": "MIT",
   "dependencies": {}
 }
