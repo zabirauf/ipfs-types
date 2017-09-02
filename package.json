@@ -1,5 +1,5 @@
 {
-  "name": "@types/ipfs",
+  "name": "typestub-ipfs",
   "version": "0.23.04",
   "description": "The type definition for IPFS package",
   "types": "index.d.ts",
