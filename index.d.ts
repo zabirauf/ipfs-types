@@ -45,7 +45,7 @@ declare class IPFS {
     pubsub: any;
 
     on(event: string, callback: () => void): IPFS;
-    on(event: 'error', callback: (error: {message:any}) => void): IPFS;
+    on(event: 'error', callback: (error: { message: any }) => void): IPFS;
     once(event: string, callback: () => void): IPFS;
 }
 
@@ -170,7 +170,7 @@ declare namespace IPFS {
         peers(callback: Callback<Peer[]>): void;
         peers(): Promise<Peer[]>;
 
-        addrs(callback: Callback<PeerInfo[]>) : void;
+        addrs(callback: Callback<PeerInfo[]>): void;
         addrs(): Promise<PeerInfo[]>;
 
         localAddrs(callback: Callback<Multiaddr[]>): void;
