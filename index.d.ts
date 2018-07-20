@@ -6,7 +6,7 @@ export = IPFS;
 type Callback<T> = (error: Error, result?: T) => void;
 
 declare class IPFS {
-    constructor(options: IPFS.Options);
+    constructor(options?: IPFS.Options);
 
     types: IPFS.Types;
 
