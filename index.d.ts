@@ -107,12 +107,23 @@ declare namespace IPFS {
 
     export type FileContent = Object | Blob | string;
 
+    /** old version? */
     export interface IPFSFile {
         path: string;
         hash: string;
         size: number;
         content?: FileContent;
     }
+
+    export interface IPFSGetResult {
+        depth: number,
+        name: string,
+        path: string,
+        size: number,
+        hash: Buffer,
+        content: Buffer,
+        type: 'file' | string;
+    };
 
     export interface FilesAPI {
         createAddStream(options: any, callback: Callback<any>): void;
@@ -128,8 +139,8 @@ declare namespace IPFS {
         cat(hash: Multihash, callback: Callback<FileContent>): void;
         cat(hash: Multihash): Promise<FileContent>;
 
-        get(hash: Multihash, callback: Callback<IPFSFile>): void;
-        get(hash: Multihash): Promise<IPFSFile>;
+        get(hash: Multihash, callback: Callback<IPFSFile | IPFSGetResult[]>): void;
+        get(hash: Multihash): Promise<IPFSFile | IPFSGetResult[]>;
 
         getPull(hash: Multihash, callback: Callback<any>): void;
     }
