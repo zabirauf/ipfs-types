@@ -1,6 +1,6 @@
 {
   "name": "typestub-ipfs",
-  "version": "0.23.8",
+  "version": "0.23.9",
   "description": "The type definition for IPFS package",
   "types": "index.d.ts",
   "main": "index.js",
