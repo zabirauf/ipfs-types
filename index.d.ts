@@ -21,12 +21,12 @@ declare class IPFS {
     version(options: any, callback: (error: Error, version: IPFS.Version) => void): void ;
     version(options: any): Promise<IPFS.Version>;
     version(callback: (error: Error, version: IPFS.Version) => void): void ;
-    version(): Promise<IPFS.Version>; 
+    version(): Promise<IPFS.Version>;
 
     id(options: any, callback: (error: Error, version: IPFS.Id) => void): void ;
     id(options: any): Promise<IPFS.Id>;
     id(callback: (error: Error, version: IPFS.Id) => void): void ;
-    id(): Promise<IPFS.Id>; 
+    id(): Promise<IPFS.Id>;
 
     repo: IPFS.RepoAPI;
     bootstrap: any;
@@ -42,9 +42,10 @@ declare class IPFS {
     ping(callback: (error: Error) => void): void;
     ping(): Promise<void>;
 
-    pubsub: any; 
+    pubsub: any;
 
     on(event: string, callback: () => void): IPFS;
+    on(event: 'error', callback: (error: {message:any}) => void): IPFS;
     once(event: string, callback: () => void): IPFS;
 }
 
