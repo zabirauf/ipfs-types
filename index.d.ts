@@ -124,7 +124,7 @@ declare namespace IPFS {
         hash: Buffer,
         content: Buffer,
         type: 'file' | string;
-    };
+    }
 
     export interface FilesAPI {
         createAddStream(options: any, callback: Callback<any>): void;

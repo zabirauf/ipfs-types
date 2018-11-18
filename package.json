@@ -12,10 +12,15 @@
   "author": "Zohaib Rauf",
   "maintainer": "Beeno Tung",
   "license": "MIT",
+  "scripts": {
+    "test": "tsc"
+  },
   "dependencies": {
     "ipfs": "^0.30.1"
   },
   "devDependencies": {
-    "@types/events": "^1.2.0"
+    "@types/events": "^1.2.0",
+    "@types/node": "^8.10.38",
+    "typescript": "^3.1.6"
   }
 }
