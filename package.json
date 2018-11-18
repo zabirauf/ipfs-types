@@ -14,5 +14,8 @@
   "license": "MIT",
   "dependencies": {
     "ipfs": "^0.30.1"
+  },
+  "devDependencies": {
+    "@types/events": "^1.2.0"
   }
 }

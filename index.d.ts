@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 
 export as namespace ipfs;
 
@@ -5,7 +6,7 @@ export = IPFS;
 
 type Callback<T> = (error: Error, result?: T) => void;
 
-declare class IPFS {
+declare class IPFS extends EventEmitter {
     constructor(options?: IPFS.Options);
 
     types: IPFS.Types;
@@ -44,9 +45,9 @@ declare class IPFS {
 
     pubsub: any;
 
-    on(event: string, callback: () => void): IPFS;
-    on(event: 'error', callback: (error: { message: any }) => void): IPFS;
-    once(event: string, callback: () => void): IPFS;
+    on(event: string, callback: () => void): this;
+    on(event: 'error', callback: (error: { message: any }) => void): this;
+    once(event: string, callback: () => void): this;
 }
 
 declare namespace IPFS {
