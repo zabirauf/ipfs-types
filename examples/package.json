@@ -10,6 +10,7 @@
     "typestub-ipfs": "../"
   },
   "devDependencies": {
+    "@types/node": "^8.10.38",
     "ts-node": "^7.0.0",
     "typescript": "^2.9.2"
   }
