@@ -1,8 +1,9 @@
 {
   "name": "typestub-ipfs",
-  "version": "0.23.7",
+  "version": "0.23.10",
   "description": "The type definition for IPFS package",
   "types": "index.d.ts",
+  "main": "index.js",
   "keywords": [
     "ipfs",
     "types",
@@ -12,6 +13,9 @@
   "maintainer": "Beeno Tung",
   "license": "MIT",
   "dependencies": {
-    "@types/events": "^1.1.0"
+    "ipfs": "^0.30.1"
+  },
+  "devDependencies": {
+    "@types/events": "^1.2.0"
   }
 }
