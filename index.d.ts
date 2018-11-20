@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 
 export as namespace ipfs;
 
@@ -5,8 +6,8 @@ export = IPFS;
 
 type Callback<T> = (error: Error, result?: T) => void;
 
-declare class IPFS {
-    constructor(options: IPFS.Options);
+declare class IPFS extends EventEmitter {
+    constructor(options?: IPFS.Options);
 
     types: IPFS.Types;
 
@@ -21,12 +22,12 @@ declare class IPFS {
     version(options: any, callback: (error: Error, version: IPFS.Version) => void): void ;
     version(options: any): Promise<IPFS.Version>;
     version(callback: (error: Error, version: IPFS.Version) => void): void ;
-    version(): Promise<IPFS.Version>; 
+    version(): Promise<IPFS.Version>;
 
     id(options: any, callback: (error: Error, version: IPFS.Id) => void): void ;
     id(options: any): Promise<IPFS.Id>;
     id(callback: (error: Error, version: IPFS.Id) => void): void ;
-    id(): Promise<IPFS.Id>; 
+    id(): Promise<IPFS.Id>;
 
     repo: IPFS.RepoAPI;
     bootstrap: any;
@@ -42,9 +43,11 @@ declare class IPFS {
     ping(callback: (error: Error) => void): void;
     ping(): Promise<void>;
 
-    pubsub: any; 
+    pubsub: any;
 
-    on(event: string, callback: () => void): void;
+    on(event: string, callback: () => void): this;
+    on(event: 'error', callback: (error: { message: any }) => void): this;
+    once(event: string, callback: () => void): this;
 }
 
 declare namespace IPFS {
@@ -105,11 +108,22 @@ declare namespace IPFS {
 
     export type FileContent = Object | Blob | string;
 
+    /** old version? */
     export interface IPFSFile {
         path: string;
         hash: string;
         size: number;
         content?: FileContent;
+    }
+
+    export interface IPFSGetResult {
+        depth: number,
+        name: string,
+        path: string,
+        size: number,
+        hash: Buffer,
+        content: Buffer,
+        type: 'file' | string;
     }
 
     export interface FilesAPI {
@@ -126,8 +140,8 @@ declare namespace IPFS {
         cat(hash: Multihash, callback: Callback<FileContent>): void;
         cat(hash: Multihash): Promise<FileContent>;
 
-        get(hash: Multihash, callback: Callback<IPFSFile>): void;
-        get(hash: Multihash): Promise<IPFSFile>;
+        get(hash: Multihash, callback: Callback<IPFSFile | IPFSGetResult[]>): void;
+        get(hash: Multihash): Promise<IPFSFile | IPFSGetResult[]>;
 
         getPull(hash: Multihash, callback: Callback<any>): void;
     }
@@ -157,7 +171,7 @@ declare namespace IPFS {
         peers(callback: Callback<Peer[]>): void;
         peers(): Promise<Peer[]>;
 
-        addrs(callback: Callback<PeerInfo[]>) : void;
+        addrs(callback: Callback<PeerInfo[]>): void;
         addrs(): Promise<PeerInfo[]>;
 
         localAddrs(callback: Callback<Multiaddr[]>): void;
